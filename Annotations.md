@@ -2,7 +2,7 @@ Project: Running model in docker
 
 -- What is docker: 
 -- Structuring project: 17 minutes + 9 minutes
--- Running: 48 minutes + 15 minutes + 19 minutes
+-- Running: 48 minutes 
 -- Writting article: 8 minutes
 
 # What is docker?
@@ -52,3 +52,35 @@ sudo docker exec -it a8f09ddf9ab3 /bin/bash
 FOR FUTURE ME:
 - Create a new repository in the github, it will help you to create content and make it more organized
 - Need to create an container for ML Flow and other for the inference
+
+
+If Docker Desktop isn't opening:
+sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+systemctl --user restart docker-desktop
+
+sudo docker run -d \
+  --name mlflow-app-container \
+  -p 5000:5000 \
+  -v /home/isabarrenha/Documents/Portfolio/maturity_2_prequel_docker/mlflow_app/mlruns:/usr/src/app/mlruns \
+  mlflow-app \
+  mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///usr/src/app/mlruns --default-artifact-root /usr/src/app/mlruns
+
+
+-d → run detached (in the background).
+--name mlflow-app → assign a human-readable name to the container (you can refer to it later as mlflow-app).
+-p 5000:5000 → map host port 5000 → container port 5000.
+This means you can open http://localhost:5000 and access whatever service is running inside the container on port 5000.
+
+mlflow-app (at the end) → the image name to run (previously built via docker build -t mlflow-app .).
+
+sudo docker ps -a: Shows active containers
+
+sudo docker stop $(docker ps -q): 
+- docker ps -q: Shows active containers with quiet mode (just bring the ids)
+- docker stop: Command to stop containers
+- $: executes the command inside the parentheses and substitutes its output into the outer command.
+
+
+sudo rm -rf /var/lib/docker/containers/54241b4bf64ba33261906b3cf1aacc1e49b50028e814afb07a60e76dd3c31bdc
+sudo systemctl restart docker
+manually remove container when it's stuck and you can see it using the sudo docker ps -a, an reset the docker
