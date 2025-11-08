@@ -65,6 +65,12 @@ sudo docker run -d \
   mlflow-app \
   mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///usr/src/app/mlruns --default-artifact-root /usr/src/app/mlruns
 
+  sudo docker run -d \
+  --name inference-app-container \
+  -p 8080:8080 \
+  ml-app:latest 
+
+
 
 -d → run detached (in the background).
 --name mlflow-app → assign a human-readable name to the container (you can refer to it later as mlflow-app).
@@ -81,6 +87,6 @@ sudo docker stop $(docker ps -q):
 - $: executes the command inside the parentheses and substitutes its output into the outer command.
 
 
-sudo rm -rf /var/lib/docker/containers/54241b4bf64ba33261906b3cf1aacc1e49b50028e814afb07a60e76dd3c31bdc
+sudo rm -rf /var/lib/docker/containers/e913eb258b5db65beb62e026bb59ac1eec073041d8d8410abd7eacae0089f151
 sudo systemctl restart docker
 manually remove container when it's stuck and you can see it using the sudo docker ps -a, an reset the docker
